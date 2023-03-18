@@ -37,6 +37,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'center_app.apps.CenterAppConfig',
+    'channels',
+    'rest_framework',
 ]
 
 MIDDLEWARE = [
@@ -68,7 +70,7 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'invest_site.wsgi.application'
-
+ASGI_APPLICATION = "<project_name>.asgi.application"
 
 # Database
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases
