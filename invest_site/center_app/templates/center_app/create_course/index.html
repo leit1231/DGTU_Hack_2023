@@ -1,10 +1,36 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Title</title>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+        form{
+          margin-top: 200px;
+          margin-left: 600px;
+          width: 100px;
+        }
+
+        body {
+            width:  200px;
+            height: 100px;
+            padding: 0px 110px 15px 10px;
+            font-size:25px;
+            font-family: Tahoma;
+            background-color: #50b848;
+        }
+
+
+
+    </style>
 </head>
 <body>
 
+    {% block content %}
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <input type="submit" value="save">
+    </form>
+    {% endblock %}
 </body>
 </html>

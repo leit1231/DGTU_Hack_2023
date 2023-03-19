@@ -3,11 +3,6 @@ from django.contrib.auth.models import User
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager
 
 
-class Message(models.Model):
-    id = models.AutoField(primary_key=True, unique=True)
-    text = models.CharField(max_length=255)
-
-
 class MyUserManager(BaseUserManager):
     def create_user(self, email, password=None):
         if not email:
@@ -67,9 +62,14 @@ class MyUser(AbstractBaseUser):
 class Course(models.Model):
     title = models.CharField(max_length=200)
     description = models.TextField()
-    image = models.ImageField()
+    image = models.ImageField(upload_to='images/')
     activated = models.BooleanField(default=True)
-    users = models.ManyToManyField(MyUser, blank=True)
+    users = models.ManyToManyField(MyUser, blank=True, related_name='courses_enrolled')
+    author = models.ForeignKey(MyUser, blank=False, on_delete=models.CASCADE,
+                               related_name='courses_created')
+
+    def __str__(self):
+        return self.title
 
 
 class Lecture(models.Model):
@@ -78,7 +78,10 @@ class Lecture(models.Model):
     title = models.CharField(max_length=200)
     text = models.TextField()
     reading = models.BooleanField(default=False)
-    file = models.FileField()
+    file = models.FileField(upload_to='files/')
+
+    def __str__(self):
+        return self.title
 
 
 class Task(models.Model):
@@ -86,11 +89,16 @@ class Task(models.Model):
     title = models.CharField(max_length=120)
     content = models.TextField()
     beginen = models.BooleanField(default=True)
-
+    def __str__(self):
+        return self.title
 
 class Answer(models.Model):
     task = models.ForeignKey(Task, on_delete=models.CASCADE)
     answer1 = models.CharField(max_length=255)  # Гении мысли
     answer2 = models.CharField(max_length=255)
     answer3 = models.CharField(max_length=255)
-    true_answer = models.TextField()  # Отцы рандома
+    true_answer = models.CharField(max_length=255)  # Отцы рандома
+    user_answer = models.CharField(max_length=255, null=True, blank=True)
+
+    def __str__(self):
+        return self.true_answer

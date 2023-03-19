@@ -34,36 +34,28 @@ class MyUserAdmin(UserAdmin):
     pass
 
 
-class CourseLectureInline(admin.TabularInline):
+
+class AnswerInline(admin.TabularInline):
+    model = Answer
+    extra = 0
+
+class TaskInline(admin.StackedInline):
+    model = Task
+    extra = 0
+    inlines = [AnswerInline]
+
+class LectureInline(admin.StackedInline):
     model = Lecture
+    extra = 0
+    inlines = [TaskInline]
 
 
 class CourseSetting(admin.ModelAdmin):
     filter_horizontal = ('users',)
-    inlines = [CourseLectureInline, ]
-
-
-
-class LectureTaskInline(admin.TabularInline):
-    model = Task
-
-
-class LectureSetting(admin.ModelAdmin):
-    inlines = [LectureTaskInline, ]
-
-
-
-class TaskAnswerInline(admin.TabularInline):
-    model = Answer
-
-
-class TaskSetting(admin.ModelAdmin):
-    inlines = [TaskAnswerInline, ]
-
-
+    inlines = [LectureInline]
 
 admin.site.register(MyUser, MyUserAdmin)
 admin.site.register(Course, CourseSetting)
-admin.site.register(Lecture, LectureSetting)
-admin.site.register(Task, TaskSetting)
+admin.site.register(Lecture)
+admin.site.register(Task)
 admin.site.register(Answer)
