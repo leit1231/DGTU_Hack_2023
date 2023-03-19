@@ -4,7 +4,6 @@ from django.contrib.auth.forms import UserCreationForm
 
 from .models import *
 
-
 class UserAdmin(BaseUserAdmin):
     add_form = UserCreationForm
 
@@ -28,7 +27,6 @@ class UserAdmin(BaseUserAdmin):
 
     search_fields = ('email',)
     ordering = ('email',)
-
     filter_horizontal = ()
 
 
@@ -41,7 +39,9 @@ class CourseLectureInline(admin.TabularInline):
 
 
 class CourseSetting(admin.ModelAdmin):
+    filter_horizontal = ('users',)
     inlines = [CourseLectureInline, ]
+
 
 
 class LectureTaskInline(admin.TabularInline):
@@ -53,8 +53,17 @@ class LectureSetting(admin.ModelAdmin):
 
 
 
+class TaskAnswerInline(admin.TabularInline):
+    model = Answer
+
+
+class TaskSetting(admin.ModelAdmin):
+    inlines = [TaskAnswerInline, ]
+
+
+
 admin.site.register(MyUser, MyUserAdmin)
 admin.site.register(Course, CourseSetting)
 admin.site.register(Lecture, LectureSetting)
-admin.site.register(Task)
+admin.site.register(Task, TaskSetting)
 admin.site.register(Answer)

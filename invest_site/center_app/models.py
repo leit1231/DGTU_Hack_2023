@@ -3,6 +3,11 @@ from django.contrib.auth.models import User
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager
 
 
+class Message(models.Model):
+    id = models.AutoField(primary_key=True, unique=True)
+    text = models.CharField(max_length=255)
+
+
 class MyUserManager(BaseUserManager):
     def create_user(self, email, password=None):
         if not email:
@@ -39,7 +44,7 @@ class MyUser(AbstractBaseUser):
                                  verbose_name='Фамилия')
     is_active = models.BooleanField(default=True)
     is_admin = models.BooleanField(default=False)
-    courses = models.ManyToManyField('Course', blank=True)
+
     objects = MyUserManager()
 
     USERNAME_FIELD = 'email'
@@ -64,6 +69,7 @@ class Course(models.Model):
     description = models.TextField()
     image = models.ImageField()
     activated = models.BooleanField(default=True)
+    users = models.ManyToManyField(MyUser, blank=True)
 
 
 class Lecture(models.Model):
